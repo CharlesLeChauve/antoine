@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   finding.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tgibert <tgibert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:14:45 by anporced          #+#    #+#             */
-/*   Updated: 2024/03/03 11:11:28 by anporced         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:29:51 by tgibert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,22 +88,36 @@ t_lst	*find_lowest_cost(t_lst **lst)
 	lowest = *lst;
 	while (aux)
 	{
-		if (aux->cost + aux->target->cost < lowest->cost + lowest->target->cost)
+		if (aux->total_cost < lowest->total_cost)
 			lowest = aux;
 		aux = aux->next;
 	}
 	return (lowest);
 }
 
-int	find_total_cost(t_lst *target_a, t_lst *target_b)
+int	find_total_cost(t_lst *target_a, t_lst *target_b, t_ab *ab)
 {
-	int	i;
+	int	dir_a;
+	int	dir_b;
+	int	cost;
 
-	i = 0;
-	if (target_a->cost > target_b->cost)
-		i = target_b->cost;
+	if (target_a->index > lst_size(ab->lst_a) / 2)
+		dir_a = -1;
 	else
-		i = target_a->cost;
-	return (i);
+		dir_a = 1;
+	if (target_b->index > lst_size(ab->lst_b) / 2)
+		dir_b = -1;
+	else
+		dir_b = 1;
+	if (dir_a == dir_b)
+	{
+		if (target_a->cost > target_b->cost)
+			cost = target_a->cost;
+		else
+			cost = target_b->cost;
+	}
+	else
+		cost = target_a->cost + target_b->cost;
+	return (cost);
 }
 

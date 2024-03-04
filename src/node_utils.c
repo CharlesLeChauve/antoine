@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tgibert <tgibert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:30:05 by anporced          #+#    #+#             */
-/*   Updated: 2024/03/03 11:12:33 by anporced         ###   ########.fr       */
+/*   Updated: 2024/03/04 17:02:12 by tgibert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,19 @@ void	rr_or_rrr(t_lst *target_a, t_lst *target_b, int flag, t_ab *ab)
 		rr(ab);
 }
 
+int		get_number_in_common(t_lst *target_a, t_lst *target_b)
+{
+	int	diff;
+	int	nic;
+
+	diff = target_a->cost > target_b->cost ? target_a->cost - target_b->cost : target_b->cost - target_a->cost;
+	if (target_b->cost != target_b->total_cost && target_a->cost != target_b->total_cost)
+		nic = 0;
+	else
+		nic = target_b->total_cost - diff;
+	return (nic);
+}
+
 void	double_rotation(t_ab *ab)
 {
 	t_lst	*target_a;
@@ -60,7 +73,9 @@ void	double_rotation(t_ab *ab)
 	target_a = target_b->target;
 	size_a = lst_size(ab->lst_a);
 	size_b = lst_size(ab->lst_b);
-	i = find_total_cost(target_a, target_b);
+	i = get_number_in_common(target_a, target_b);
+	
+ // i doit etre total - difference absolue entre a cost et b cost
 	// printf("target_a->cost = %d\t target_b->cost = %d\t i = %d\n", target_a->cost, target_b->cost, i);
 	if (target_a->index <= size_a / 2 && target_b->index <= size_b / 2)
 		while (i--)
